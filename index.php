@@ -3,19 +3,23 @@
 declare(strict_types=1);
 
 // Le mot cle $this se rattacher a chaque instance ou objet (se referer au objet)
+// -> permet d'acceder au element d'un objets c'est a dire reference au instance
+// ::  permet d'acceder les element de class direct
+
+// Utiliser le mot clé self pour cibler les element static dans la class
 
 class Pont{
 
 
 
-    private string $unit = "m²";
+    private const UNIT = "m²";
     private float $longueur;
     protected float $largeur;
 
     //Encapsulation 
     public function setLongueur(float $longueur): void
     {
-       $this->validateSize($longueur);
+        self::validateSize($longueur);
         $this->longueur = $longueur;
         
     }
@@ -26,7 +30,7 @@ class Pont{
 
     public function setLargeur(float $largeur): void
     {
-        $this->validateSize($largeur);
+        self::validateSize($largeur);
         $this->largeur = $largeur;
         
     }
@@ -36,10 +40,13 @@ class Pont{
         return $this->largeur;
     }
 
-   private function validateSize(float $size) : void{
+   public static function validateSize(float $size) : bool
+   {
         if($size  <= 0 ){
             trigger_error("Le nombre est trop court min(1)",E_USER_ERROR);
         }
+
+        return true;
    }
 
    public function getSurface(): float
@@ -49,7 +56,7 @@ class Pont{
 
    public function displaySurfaceText() : string
    {
-         return $this->getSurface(). " ". $this->unit;
+         return $this->getSurface(). " ". self::UNIT;
    }
 
 }
