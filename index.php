@@ -10,11 +10,11 @@ declare(strict_types=1);
 
 class Pont{
 
-
-
     private const UNIT = "m²";
-    private float $longueur;
-    protected float $largeur;
+    public function __construct(private float $longueur, private float $largeur)
+    {
+        
+    }
 
     //Encapsulation 
     public function setLongueur(float $longueur): void
@@ -63,9 +63,7 @@ class Pont{
 
 
 
-$pont = new Pont;
+$pont = new Pont(25,10);
 
-$pont->setLongueur(25);
-$pont->setLargeur(10);
 
 print_r($pont->displaySurfaceText());

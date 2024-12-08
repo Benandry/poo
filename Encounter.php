@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+// declare(strict_types=1);
 
 
 class Encounter{
@@ -13,7 +13,7 @@ class Encounter{
 
     public static function probabilityAgainst(Player $playerOne, Player $playerTwo)
     {
-        return 1/(1+(10 ** (($playerTwo->level - $playerOne->level)/400)));
+        return 1/(1+(10 ** (($playerTwo->getLevel() - $playerOne->getLevel())/400)));
     }
     
     public static  function setNewLevel(Player $playerOne, Player $playerTwo, int $playerOneResult)
@@ -22,22 +22,32 @@ class Encounter{
             trigger_error(sprintf('Invalid result. Expected %s',implode(' or ', self::RESULT_POSSIBILITIES)));
         }
     
-        $playerOne->level += round(32 * ($playerOneResult - self::probabilityAgainst($playerOne, $playerTwo)));
+       $playerOne->setLevel(  $playerOne->getLevel() + round(32 * ($playerOneResult - self::probabilityAgainst($playerOne, $playerTwo))));
     }
 }
 
 
 class Player{
-    public float $level;
+
+    public function __construct(private int $level){}
+
+    public function getLevel(): int
+    {
+        return $this->level;
+    }
+
+    public function setLevel(int $level) : self
+    {
+        $this->level = $level;
+        return $this;
+    }
 }
 
 
-$greg = new Player;
-$jade = new Player;
+$greg = new Player(400);
+$jade = new Player(800);
 
 
-$greg->level = 400;
-$jade->level = 800;
 
 
 echo sprintf(
@@ -53,8 +63,8 @@ Encounter::setNewLevel($jade, $greg, Encounter::RESULT_LOSER);
 
 echo sprintf(
     'les niveaux des joueurs ont évolués vers %s pour Greg et %s pour Jade',
-    $greg->level,
-    $jade->level
+    $greg->getLevel(),
+    $jade->getLevel()
 );
 
 exit(0);
